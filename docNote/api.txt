@@ -1,0 +1,35 @@
+* đăng nhập :
+- post("/login") 
+khi post dữ liệu lên từ req gồm (email, password) => service sẽ tìm kiếm theo email
+=> trả về mảng dữ liệu phù hợp => biên dịch mật khẩu kiểm tra nếu đấy là user
+=> trả về res gồm thông tin và mã token nếu kiểm tra không phải là user thì next()
+=> chuyển function tiếp theo kiểm tra nếu là admin => res thông tin và mã token
+nếu không tìm thấy data nào => chuyển sang đăng ký
+
+
+* đăng ký :
+post("/sign-up")
+khi post dữ liệu lên sẽ kiểm tra nếu có email nào tồn tại => email đã tồn tại 
+nếu chưa tồn tại thì next() => mã hóa mật khẩu trước khi đưa vào service tạo tài khoản
+
+* trang admin :
+khi bấm quản lý thông tin 
+get("/:token") lấy toàn bộ data nếu là admin
+get("/page/:numPage") hiển thị số data trên một page
+get("/detail/:id") hiển thị chi tiết một người dùng theo id
+put("/:id") cập nhật thông tin theo id
+delete("/:id") xóa thông tin theo id
+    => req kèm theo mã token => xác nhận đấy là admin 
+    => trả về toàn bộ dữ liệu 
+    admin có thể xem chi tiết thông tin,sửa,xóa,thêm thông tin của người dùng
+khi bấm quản lý thư viện 
+get("/book/:token") lấy toàn bộ data book nếu là admin
+get("/book/page/:numPage") hiển thị số data book trên một page
+put("/book/:id") cập nhật thông tin book theo id
+delete("/book/:id") xóa thông tin book theo id
+    => hiển thị toàn bộ thông tin các sách mà người dùng tạo dưới 
+    dạng bảng gồm các cột stt(tính theo thời,nếu thời gian mới nhất sẽ hiển thị đầu tiên),
+    cột tên sách và cột email tạo cuốn sách đấy
+    admin có thể sửa,xóa
+
+* trang user :

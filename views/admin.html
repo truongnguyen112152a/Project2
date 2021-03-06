@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="html-admin" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
+        integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="body-admin">
+    <div class="header">
+        <div style="color: #130f40;" class="user">Nguyen Tien Truong</div>
+        <div><button id="logout" type="button" class="btn btn-outline-primary">Đăng xuất</button></div>
+    </div>
+    <div class="parent">
+        <div class="menu">
+            <div class="data-admin">Thông tin admin</div>
+            <div class="data-user">Quản lý thông tin</div>
+            <div class="data-book">Quản lý thư viện</div>
+        </div> 
+        <div class="content content-infor hide">
+            <!-- Button trigger modal -->
+            <!-- <div class="btn-header">
+                <button onclick="autoData()" type="button" class="btn btn-outline-secondary">Tạo tự động</button>
+                <button id="btn-create" type="button" class="btn btn-info" data-toggle="modal"
+                data-target="#exampleModal" onclick="toAdd()">
+                    Tạo mới
+                </button>
+            </div> -->
+            <div class="content-table">
+                <table class="table table-borderless">
+                    <thead>
+                        <tr class="table-info">
+                            <th scope="col">STT</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Username</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="list-user">
+                        <!--thêm data-->
+                    </tbody>
+                </table>
+            </div>
+            <div class="btn-footer">
+                <div class="change-tab">
+                    <button id="idBack" type="button" class="btn btn-outline-secondary" onclick="myBack()"><</button>
+                    <div class="number-page">
+                        <!--thêm button đánh số trang-->
+                    </div>
+                    <button id="idNext" type="button" class="btn btn-outline-secondary" onclick="myNext()">></button>
+                </div>
+            </div>
+        </div> 
+        <div class="content content-book hide">
+            <!-- Button trigger modal -->
+            <div class="btn-header">
+                <button onclick="autoData()" type="button" class="btn btn-outline-secondary">Tạo tự động</button>
+                <button id="btn-create" type="button" class="btn btn-info" data-toggle="modal"
+                data-target="#exampleModal" onclick="toAdd()">
+                    Tạo mới
+                </button>
+            </div>
+            <div class="content-table">
+                <table class="table table-borderless">
+                    <thead>
+                        <tr class="table-info">
+                            <th scope="col">STT</th>
+                            <th scope="col">Bookname</th>
+                            <th scope="col">Email</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="list-user">
+                        <!--thêm data-->
+                    </tbody>
+                </table>
+            </div>
+            <div class="btn-footer">
+                <div class="change-tab">
+                    <button id="idBack" type="button" class="btn btn-outline-secondary" onclick="myBack()"><</button>
+                    <div class="book-number-page">
+                        <!--thêm button đánh số trang-->
+                    </div>
+                    <button id="idNext" type="button" class="btn btn-outline-secondary" onclick="myNext()">></button>
+                </div>
+            </div>
+        </div>    
+    </div> 
+    <!-- Modal -->
+    <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td>
+                                Email:
+                            </td>
+                            <td>
+                                <input id="int-email" class="input-text" type="text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Username:
+                            </td>
+                            <td>
+                                <input id="int-username" class="input-text" type="text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Phone:
+                            </td>
+                            <td>
+                                <input id="int-phone" class="input-text" type="text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Password:
+                            </td>
+                            <td>
+                                <input id="int-password" class="input-text" type="text">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" id="create-user" class="btn btn-primary" data-dismiss="modal" onclick="doneAdd()">Done</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <div class="detail hide">
+        <button id="back" type="button" class="btn btn-primary">Trở lại</button>
+        <div class="detail-table">
+            <table class="table table-borderless">
+                <thead>
+                <tr class="table-secondary">
+                    <th scope="col">Email</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody id="list-user">
+                </tbody>
+            </table>
+        </div>
+        <!--modal-->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table>
+                            <tr>
+                                <td>
+                                    Email:
+                                </td>
+                                <td>
+                                    <input id="email" class="input-text" type="text">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Username:
+                                </td>
+                                <td>
+                                    <input id="username" class="input-text" type="text">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Phone:
+                                </td>
+                                <td>
+                                    <input id="phone" class="input-text" type="text">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Password:
+                                </td>
+                                <td>
+                                    <input id="password" class="input-text" type="text">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                        <button type="button" id="create-user" class="btn btn-primary" data-dismiss="modal" onclick="doneChange()">Hoàn tất</button>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>
+</body>
+<script src="/js/admin.js"></script>
+</html>
