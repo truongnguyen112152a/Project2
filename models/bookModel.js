@@ -1,7 +1,7 @@
 const mongoose = require('../config/connectDB')
 let userSchema = {
     email: String,
-    username: String,
+    name: String,
     time: String
 }
 let model = mongoose.model("book", userSchema)

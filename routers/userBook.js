@@ -1,18 +1,17 @@
 const express = require('express')
 const router = express.Router()
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
 const jwt = require('jsonwebtoken');
+const book = require('../services/bookService')
 const user = require('../services/userService')
 
-// xem toàn bộ data quyền admin
-router.get("/:token", (req, res, next) => {
+// tạo một book mới theo mã token
+router.post("/:token", (req, res, next) => {
     try {
         var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
         var decode = jwt.verify(token, "project2")
         user.getUserId(decode._id)
         .then((data) => {
-            if(data[0].roles === "admin") return next()
+            if(data[0].roles === "user") return next()
             return res.json({
                 error: true,
                 message: "Bạn chưa đăng nhập"
@@ -41,13 +40,105 @@ router.get("/:token", (req, res, next) => {
             message: "lỗi input 1 :" + error,
         })
     }
+}, (req, res, next) => {
+    try {
+        var email = req.body.email
+        var name = req.body.name
+        book.getEmail(email)
+        .then((data) => {
+            for(let i = 0; i < data.length; i++) {
+                if(data[i].name === name) return res.json({
+                    error: true,
+                    message: "Tên sách đã tồn tại"
+                })
+            }
+            return next()
+        }).catch((err) => {
+            return res.json({
+                error: true,
+                message: "lỗi xác minh email :" + err
+            })
+        });
+    } catch (error) {
+        return res.json({
+            error: true,
+            message: "lỗi input 2 :" + error
+        })
+    }
 }, (req, res) => {
     try {
-        user.getUserAll()
+        var email = req.body.email
+        var name = req.body.name
+        var time = req.body.time
+        var obj = {
+            email,
+            name,
+            time
+        }
+        book.createBook(obj)
         .then((data) => {
             return res.json({
                 error: false,
-                message: "Tất cả data",
+                message: "tạo book thành công"
+            })
+        }).catch((err) => {
+            return res.json({
+                error: true,
+                message: "lỗi tạo book không thành công là :" + err
+            })
+        });
+    } catch (error) {
+        return res.json({
+            error: true,
+            message: "lỗi input :" + error
+        })
+    }
+})
+
+// xem thông tin book theo token quyền user
+router.get("/:token", (req, res, next) => {
+    try {
+        var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
+        var decode = jwt.verify(token, "project2")
+        user.getUserID(decode._id)
+        .then((data) => {
+            if(data[0].roles === "user") return next()
+            return res.json({
+                error: false,
+                message: "Bạn chưa đăng nhập"
+            })
+        }).catch((err) => {
+            return res.json({
+                error: true,
+                message: "lỗi tìm kiếm 1 :" + err
+            })
+        });
+    } catch (error) {
+        if(error.message === "jwt must be provided"){
+            return res.json({
+                error: true,
+                message: "Bạn phải cung cấp mã token"
+            })
+        }
+        if(error.message === "invalid signature"){
+            return res.json({
+                error: true,
+                message: "Mã token không đúng"
+            })
+        }
+        return res.json({
+            err: true,
+            message: "lỗi input 1 :" + error,
+        })
+    }
+}, (req, res) => {
+    try {
+        var email = req.body.email
+        book.getEmail(email)
+        .then((data) => {
+            return res.json({
+                error: false,
+                message: "Tất cả book",
                 value: data
             })
         }).catch((err) => {
@@ -64,136 +155,14 @@ router.get("/:token", (req, res, next) => {
     }
 })
 
-// xem data trên một page quyền admin
-router.get("/page/:numPage", (req, res, next) => {
+// thay đổi thông tin book quyền user
+router.put("/:token", (req, res, next) => {
     try {
         var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
         var decode = jwt.verify(token, "project2")
-        user.getUserId(decode._id)
+        user.getUserID(decode._id)
         .then((data) => {
-            if(data[0].roles === "admin") return next()
-            return res.json({
-                error: true,
-                message: "Bạn chưa đăng nhập"
-            })
-        }).catch((err) => {
-            return res.json({
-                error: true,
-                message: "lỗi tìm kiếm 1 :" + err
-            })
-        });
-    } catch (error) {
-        if(error.message === "jwt must be provided"){
-            return res.json({
-                error: true,
-                message: "Bạn phải cung cấp mã token"
-            })
-        }
-        if(error.message === "invalid signature"){
-            return res.json({
-                error: true,
-                message: "Mã token không đúng"
-            })
-        }
-        return res.json({
-            err: true,
-            message: "lỗi input 1 :" + error,
-        })
-    }
-}, (req, res) => {
-    try {
-        let x = Number(req.params.numPage)
-        x = (x - 1) * 6
-        user.getUserAll()
-        .skip(x)
-        .limit(6)
-        .then((data) => {
-            return res.json({
-                error: false,
-                messenge: "hiển thị chi tiết dữ liệu thành công",
-                value: data
-            })
-        }).catch((err) => {
-            res.json({
-                error: true,
-                messenge: "lỗi tìm kiếm 2 :" + err
-            })   
-        });    
-    } catch (error) {
-        return res.json({
-            err: true,
-            message: "lỗi input 2 :" + error,
-        })
-    }
-    
-})
-
-// xem chi tiết thông tin của một user quyền admin
-router.get("/detail/:id", (req, res, next) => {
-    try {
-        var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
-        var decode = jwt.verify(token, "project2")
-        user.getUserId(decode._id)
-        .then((data) => {
-            if(data[0].roles === "admin") return next()
-            return res.json({
-                error: false,
-                message: "Bạn chưa đăng nhập"
-            })
-        }).catch((err) => {
-            return res.json({
-                error: true,
-                message: "lỗi tìm kiếm 1 :" + err
-            })
-        });
-    } catch (error) {
-        if(error.message === "jwt must be provided"){
-            return res.json({
-                error: true,
-                message: "Bạn phải cung cấp mã token"
-            })
-        }
-        if(error.message === "invalid signature"){
-            return res.json({
-                error: true,
-                message: "Mã token không đúng"
-            })
-        }
-        return res.json({
-            err: true,
-            message: "lỗi input 1 :" + error,
-        })
-    }
-}, (req, res) => {
-    try {
-        user.getUserId(req.params.id)
-        .then((data) => {
-            return res.json({
-                error: false,
-                message: "hiển thị dữ liệu thành công",
-                value: data
-            })
-        }).catch((err) => {
-            return res.json({
-                error: true,
-                message: "lỗi hiển thị chi tiết :" + err
-            })   
-        });
-    } catch (error) {
-        return res.json({
-            error: true,
-            message: "lỗi input 2 :" + error
-        })
-    }
-})
-// thay đổi thông tin theo id quyền admin
-router.put("/:id", (req, res, next) => {
-    try {
-        var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
-        var decode = jwt.verify(token, "project2")
-        user.getUserId(decode._id)
-        .then((data) => {
-            if(data[0].roles === "admin") return next()
+            if(data[0].roles === "user") return next()
             return res.json({
                 error: false,
                 message: "Bạn chưa đăng nhập"
@@ -225,13 +194,16 @@ router.put("/:id", (req, res, next) => {
 }, (req, res, next) => {
     try {
         var email = req.body.email
-        user.getEmail(email)
+        var name = req.body.name
+        book.getEmail(email)
         .then((data) => {
-            if(!data.length) return next()
-            return res.json({
-                error: true,
-                message: "email này đã tồn tại"
-            })
+            for(let i = 0; i < data.length; i++) {
+                if(data[i].name === name) return res.json({
+                    error: true,
+                    message: "Tên sách đã tồn tại"
+                })
+            }
+            return next()
         }).catch((err) => {
             return res.json({
                 error: true,
@@ -246,43 +218,43 @@ router.put("/:id", (req, res, next) => {
     }
 }, (req, res) => {
     try {
-        var email = req.body.email
-        var username = req.body.username
-        var phone = req.body.phone
-        var password = req.body.password
-        bcrypt.hash(password, saltRounds, function(err, hash) {
-            var obj = { email, username, phone, password: hash}
-            user.updateUser(req.params.id,obj)
-            .then((data) => {
-                return res.json({
-                    error: false,
-                    message: "cập nhật dữ liệu thành công",
-                    value: data
-                })
-            }).catch((err) => {
-                return res.json({
-                    error: true,
-                    message: "lỗi cập nhật :" + err
-                })   
-            });
-        })
+        var id = req.body.id
+        var name = req.body.name
+        var time = req.body.time
+        var obj = {
+            name,
+            time
+        }
+        book.updateBook(id, obj)
+        .then((data) => {
+            return res.json({
+                error: false,
+                message: "thay đổi book thành công"
+            })
+        }).catch((err) => {
+            return res.json({
+                error: true,
+                message: "lỗi thay đổi book không thành công là :" + err
+            })
+        });
     } catch (error) {
         return res.json({
             error: true,
-            message: "lỗi input 3 :" + error
+            message: "lỗi input 3:" + error
         })
     }
 })
-// xóa thông tin theo id quyền admin
-router.delete("/:id", (req, res, next) => {
+
+// xóa book quyền user
+router.delete("/:token", (req, res, next) => {
     try {
         var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
         var decode = jwt.verify(token, "project2")
-        user.getUserId(decode._id)
+        user.getUserID(decode._id)
         .then((data) => {
-            if(data[0].roles === "admin") return next()
+            if(data[0].roles === "user") return next()
             return res.json({
-                error: false,
+                error: true,
                 message: "Bạn chưa đăng nhập"
             })
         }).catch((err) => {
@@ -311,24 +283,25 @@ router.delete("/:id", (req, res, next) => {
     }
 }, (req, res) => {
     try {
-        user.deleteUser(req.params.id)
+        var id = req.body.id
+        book.deleteBook(id)
         .then((data) => {
             return res.json({
                 error: false,
-                message: "xóa dữ liệu thành công"
-            })        
+                message: "xóa book thành công"
+            })
         }).catch((err) => {
             return res.json({
                 error: true,
-                message: "lỗi xóa :" + err
-            })         
+                message: "lỗi xóa book không thành công là :" + err
+            })
         });
     } catch (error) {
         return res.json({
             error: true,
-            message: "lỗi input 2 :" + error
+            message: "lỗi input :" + error
         })
     }
-    
 })
+
 module.exports = router

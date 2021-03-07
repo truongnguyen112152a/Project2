@@ -3,30 +3,33 @@
 với người dùng phổ thông thì roles = "user", với admin thì roles = "admin"
 - Book : chứa thông tin của các cuốn sách mà người dùng tạo dưới tên email
 gồm các key (email,name,time) => mỗi một email sẽ tạo được nhiều cuốn sách 
-miễn là không trùng tên nhau
+miễn là không trùng tên nhau,mỗi book sẽ là một bản ghi riêng
 
 * Hoạt động :
 - khi ở trang đăng nhập :
     admin đăng nhập thì đúng sẽ chuyển đến trang admin
     user đăng nhập đúng sẽ chuyển đến trang user,sai sẽ chuyển đến trang signUp
 
-- tại trang admin : trang user cũng tương tự nhưng chỉ xem được của mình user
+- tại trang admin :
     khi bấm vào xem thông tin người dùng,bảng người dùng sẽ hiện ra,
     khi bấm vào quản lý thư viện thì bảng thông tin sách hiện ra,
     khi bấm nút đăng xuất sẽ thoát về trang login
  + tại phần thông tin người dùng :
-    bảng gồm các cột là stt,tên người dùng,email và một cột gồm 2 nút chi tiết và xóa
+    bảng gồm các cột là stt,email,phone và một cột gồm 2 nút chi tiết và xóa
     khi bấm chi tiết sẽ xem được toàn bộ thông tin của người dùng trừ roles,
     trong chi tiết có thể thay đổi được thông tin người dùng
     khi bấm xóa sẽ xóa người dùng
     ngoài ra còn có nút thêm người dùng,khi bấm sẽ hiển thị lên thanh modal nhập thông tin
  + tại phần quản lý thư viện :
-    bảng gồm các cột là tên email,tên sách,thời gian tạo và một cột 2 nút thay đổi và xóa
+    bảng gồm các cột là tên email,số lượng sách mà email đó đã tạo
+    và một cột 2 nút chi tiết và xóa
+    khi ấn chi tiết sẽ hiển thị ra chi tiết bảng thông tin book của một user
+    như phần quản lý thư viện của user
 
 - tại trang user : trang user cũng tương tự admin nhưng chỉ xem được của mình user
  + khi bấm quản lý thông tin sẽ hiển thị bảng chứa toàn bộ thông tin người 
-    dùng gồm các cột email,tên người dùng,số điện thoại,không hiển thị password
-    chỉ có thể thay đổi và 2 nút thay đổi,xóa
+    dùng gồm các cột email,tên người dùng,số điện thoại(không hiển thị password
+    password chỉ có thể thay đổi) và cột 2 nút thay đổi,xóa
  + khi bấm vào quản lý thư viện sẽ hiển thị ra bảng gồm các cột stt(tính theo thời gian),
     tên sách và thời gian tạo và 2 nút thay đổi,xóa
     có thêm nút tạo mới,khi ấn nút sẽ hiển thị ô modal có ô tên sách để tạo mới một cuốn sách

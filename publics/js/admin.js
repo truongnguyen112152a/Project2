@@ -41,7 +41,7 @@ $(".data-book").click(function() {
 function showAllData() {
     var token = getCookie("token")
     $.ajax({
-        url: "/admin/" + token,
+        url: "/user/" + token,
         method: "GET",
         headers: {
             "authorization" : "Bearer " + token
@@ -93,7 +93,7 @@ function showAllData() {
 // hiển thị theo số trang
 function showDataOfPage() {
     $.ajax({
-        url: "/admin/page/" + arrCurrentPage[1],
+        url: "/user/page/" + arrCurrentPage[1],
         method: "GET"
     })
         .then((data) => {

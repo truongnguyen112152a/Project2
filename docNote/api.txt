@@ -1,5 +1,5 @@
 * đăng nhập :
-- post("/login") 
+- post("/login") (/user)
 khi post dữ liệu lên từ req gồm (email, password) => service sẽ tìm kiếm theo email
 => trả về mảng dữ liệu phù hợp => biên dịch mật khẩu kiểm tra nếu đấy là user
 => trả về res gồm thông tin và mã token nếu kiểm tra không phải là user thì next()
@@ -8,28 +8,33 @@ nếu không tìm thấy data nào => chuyển sang đăng ký
 
 
 * đăng ký :
-post("/sign-up")
-khi post dữ liệu lên sẽ kiểm tra nếu có email nào tồn tại => email đã tồn tại 
+- post("/sign-up") (/user)
+khi post dữ liệu lên sẽ kiểm tra không được trùng email
 nếu chưa tồn tại thì next() => mã hóa mật khẩu trước khi đưa vào service tạo tài khoản
 
-* trang admin :
 khi bấm quản lý thông tin 
-get("/:token") lấy toàn bộ data nếu là admin
-get("/page/:numPage") hiển thị số data trên một page
-get("/detail/:id") hiển thị chi tiết một người dùng theo id
-put("/:id") cập nhật thông tin theo id
-delete("/:id") xóa thông tin theo id
-    => req kèm theo mã token => xác nhận đấy là admin 
-    => trả về toàn bộ dữ liệu 
-    admin có thể xem chi tiết thông tin,sửa,xóa,thêm thông tin của người dùng
-khi bấm quản lý thư viện 
-get("/book/:token") lấy toàn bộ data book nếu là admin
-get("/book/page/:numPage") hiển thị số data book trên một page
-put("/book/:id") cập nhật thông tin book theo id
-delete("/book/:id") xóa thông tin book theo id
-    => hiển thị toàn bộ thông tin các sách mà người dùng tạo dưới 
-    dạng bảng gồm các cột stt(tính theo thời,nếu thời gian mới nhất sẽ hiển thị đầu tiên),
-    cột tên sách và cột email tạo cuốn sách đấy
-    admin có thể sửa,xóa
+- file (/admin) :
+    + get("/:token") lấy toàn bộ data nếu (admin)
+    + get("/page/:numPage") hiển thị số data trên một page (admin)
+    + get("/detail/:id") hiển thị chi tiết theo id (admin)
+    + put("/:id") cập nhật thông tin theo id (admin)
+    + delete("/:id") xóa thông tin theo id (admin)
 
-* trang user :
+- file (/user) :
+    + get("/:token") hiển thị thông tin khi user đăng nhập (user)
+    + put("/:token") cập nhật thông tin theo token (user)
+    + delete("/:token") xóa thông tin theo token (user)
+
+khi bấm quản lý thư viện (/book)
+- file (/adminBook) :
+    get("/:token") lấy toàn bộ data book (admin)
+    get("/page/:numPage") hiển thị số data book trên một page (admin)
+    get("/admin/:token") xem chi tiết thông tin theo email (admin)
+    put("/:id") cập nhật thông tin book theo id (admin)
+    delete("/:id") xóa thông tin book theo id (admin)
+
+- file (/userBook) :
+    get("/:token") xem chi tiết book theo token (user)
+    post("/:token") thêm book theo token (user)
+    put("/:token") cập nhật book theo token (user)
+    delete("/:token") xóa book theo token (user)

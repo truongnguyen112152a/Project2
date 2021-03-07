@@ -3,8 +3,8 @@ const userModel = require('../models/userModel')
 function getUserAll() {
     return userModel.find()
 }
-function getUserID(id) {
-    return userModel.find({
+function getUserId(id) {
+    return userModel.findOne({
         _id: id
     })
 }
@@ -28,7 +28,7 @@ function getEmail(email) {
 }
 module.exports = {
     getUserAll,
-    getUserID,
+    getUserId,
     createUser,
     updateUser,
     deleteUser,

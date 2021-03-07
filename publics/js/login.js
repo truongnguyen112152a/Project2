@@ -14,7 +14,7 @@ function myLogin() {
             if(!data.error) {
                 setCookie("token", data.token, 1.2)
                 alert(data.messenger)
-                if(data.value) return window.location.href = "/admin"
+                if(data.value) return window.location.href = "/home-admin"
                 return alert("bạn không phải admin")
             }
             alert(data.messenger)
