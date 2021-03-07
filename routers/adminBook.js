@@ -5,11 +5,12 @@ const book = require('../services/bookService')
 const user = require('../services/userService')
 
 // xem toàn bộ thông tin book quyền admin
+// ok
 router.get("/:token", (req, res, next) => {
     try {
         var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
         var decode = jwt.verify(token, "project2")
-        user.getUserID(decode._id)
+        user.getUserId(decode._id)
         .then((data) => {
             if(data[0].roles === "admin") return next()
             return res.json({
@@ -64,11 +65,12 @@ router.get("/:token", (req, res, next) => {
 })
 
 // thay đổi thông tin book quyền admin
+// ok
 router.put("/:token", (req, res, next) => {
     try {
         var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
         var decode = jwt.verify(token, "project2")
-        user.getUserID(decode._id)
+        user.getUserId(decode._id)
         .then((data) => {
             if(data[0].roles === "admin") return next()
             return res.json({
@@ -154,11 +156,12 @@ router.put("/:token", (req, res, next) => {
 })
 
 // xóa book quyền admin
+// ok
 router.delete("/:token", (req, res, next) => {
     try {
         var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
         var decode = jwt.verify(token, "project2")
-        user.getUserID(decode._id)
+        user.getUserId(decode._id)
         .then((data) => {
             if(data[0].roles === "admin") return next()
             return res.json({

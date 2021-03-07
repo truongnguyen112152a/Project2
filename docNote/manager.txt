@@ -1,5 +1,5 @@
 * Data base gồm 2 collection :
-- User : chứa thông tin người dùng gồm các key (email,username,phone,password,roles),
+- User : chứa thông tin người dùng gồm các key (id,email,username,phone,password,roles),
 với người dùng phổ thông thì roles = "user", với admin thì roles = "admin"
 - Book : chứa thông tin của các cuốn sách mà người dùng tạo dưới tên email
 gồm các key (email,name,time) => mỗi một email sẽ tạo được nhiều cuốn sách 
@@ -15,7 +15,7 @@ miễn là không trùng tên nhau,mỗi book sẽ là một bản ghi riêng
     khi bấm vào quản lý thư viện thì bảng thông tin sách hiện ra,
     khi bấm nút đăng xuất sẽ thoát về trang login
  + tại phần thông tin người dùng :
-    bảng gồm các cột là stt,email,phone và một cột gồm 2 nút chi tiết và xóa
+    bảng gồm các cột là stt,email,username,id và một cột gồm 2 nút chi tiết và xóa
     khi bấm chi tiết sẽ xem được toàn bộ thông tin của người dùng trừ roles,
     trong chi tiết có thể thay đổi được thông tin người dùng
     khi bấm xóa sẽ xóa người dùng
@@ -29,8 +29,8 @@ miễn là không trùng tên nhau,mỗi book sẽ là một bản ghi riêng
 - tại trang user : trang user cũng tương tự admin nhưng chỉ xem được của mình user
  + khi bấm quản lý thông tin sẽ hiển thị bảng chứa toàn bộ thông tin người 
     dùng gồm các cột email,tên người dùng,số điện thoại(không hiển thị password
-    password chỉ có thể thay đổi) và cột 2 nút thay đổi,xóa
+    password chỉ có thể thay đổi),id và cột 2 nút thay đổi,xóa
  + khi bấm vào quản lý thư viện sẽ hiển thị ra bảng gồm các cột stt(tính theo thời gian),
-    tên sách và thời gian tạo và 2 nút thay đổi,xóa
+    tên sách và thời gian tạo,id và 2 nút thay đổi,xóa
     có thêm nút tạo mới,khi ấn nút sẽ hiển thị ô modal có ô tên sách để tạo mới một cuốn sách
     chỉ cần thêm tên sách còn thời gian sẽ tự lưu

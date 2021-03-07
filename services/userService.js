@@ -4,7 +4,7 @@ function getUserAll() {
     return userModel.find()
 }
 function getUserId(id) {
-    return userModel.findOne({
+    return userModel.find({
         _id: id
     })
 }

@@ -41,7 +41,7 @@ $(".data-book").click(function() {
 function showAllData() {
     var token = getCookie("token")
     $.ajax({
-        url: "/user/" + token,
+        url: "/admin/" + token,
         method: "GET",
         headers: {
             "authorization" : "Bearer " + token
@@ -74,6 +74,7 @@ function showAllData() {
                             <th id="stt" scope="row">${stt++}</th>
                             <td>${data.value[i].email}</td>
                             <td>${data.value[i].username}</td>
+                            <td>${data.value[i]._id}</td>
                             <td>
                                 <button onclick=myDetail('${data.value[i]._id}') type="button" class="btn btn-warning">Chi tiết</button>
                                 <button onclick=myDelete('${data.value[i]._id}') type="button" class="btn btn-danger">Xóa</button>
@@ -92,8 +93,9 @@ function showAllData() {
 
 // hiển thị theo số trang
 function showDataOfPage() {
+    var token = getCookie("token")
     $.ajax({
-        url: "/user/page/" + arrCurrentPage[1],
+        url: "/admin/page/" + arrCurrentPage[1] + "/" + token,
         method: "GET"
     })
         .then((data) => {
@@ -107,6 +109,7 @@ function showDataOfPage() {
                                 <th id="stt" scope="row">${stt++}</th>
                                 <td>${data.value[i].email}</td>
                                 <td>${data.value[i].username}</td>
+                                <td>${data.value[i]._id}</td>
                                 <td>
                                     <button onclick=myDetail('${data.value[i]._id}') type="button" class="btn btn-warning">Chi tiết</button>
                                     <button onclick=myDelete('${data.value[i]._id}') type="button" class="btn btn-danger">Xóa</button>
@@ -155,7 +158,6 @@ function myBack() {
         count1.pop() 
         x--
         count1.push(x)
-        console.log(count1[1]);
         currentPage(x * 4 + pageTab)
         numPageOnTab(x * 4 + 1, 2)
         showDataOfPage()
@@ -170,7 +172,6 @@ function myNext() {
         count1.pop()
         x++
         count1.push(x)
-        console.log(count1[1]);
         currentPage(x * 4 + 1)
         numPageOnTab(x * 4 + 1, 2)
         showDataOfPage()
@@ -200,8 +201,9 @@ function myDetail(data) {
     $(".parent").addClass("hide")
     $(".detail").removeClass("hide")
     $("#list-user").empty()
+    var token = getCookie("token")
     $.ajax({
-        url: "/user/detail/" + data,
+        url: "/admin/detail/" + data  + "/" + token,
         method: "GET"
     })
     .then((data) => {
@@ -351,6 +353,7 @@ function doneAdd() {
 // thoát về login
 $("#logout").click(() => {
     if (confirm("Bạn có muốn thoát hay không?")) {
+        setCookie("token", "", -1)
         window.location.href = "/login"
     }
 })

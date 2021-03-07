@@ -1,6 +1,6 @@
 function myLogin() {
-    var email = $("#intEmail").val()
-    var password = $("#intPassword").val()
+    var email = $("#intEmail").val().trim()
+    var password = $("#intPassword").val().trim()
     if(email && password) {
         return $.ajax({
             url: "/user/login",
@@ -13,11 +13,11 @@ function myLogin() {
         .then((data) => {
             if(!data.error) {
                 setCookie("token", data.token, 1.2)
-                alert(data.messenger)
+                alert(data.message)
                 if(data.value) return window.location.href = "/home-admin"
                 return alert("bạn không phải admin")
             }
-            alert(data.messenger)
+            alert(data.message)
             if(confirm("bạn có muốn đăng ký") == true) {
                 return window.location.href = "/sign-up"
             }

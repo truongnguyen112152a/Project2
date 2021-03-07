@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const user = require('../services/userService')
 
 // xem toàn bộ data quyền admin
+// ok
 router.get("/:token", (req, res, next) => {
     try {
         var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
@@ -65,7 +66,8 @@ router.get("/:token", (req, res, next) => {
 })
 
 // xem data trên một page quyền admin
-router.get("/page/:numPage", (req, res, next) => {
+// ok
+router.get("/page/:numPage/:token", (req, res, next) => {
     try {
         var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
         var decode = jwt.verify(token, "project2")
@@ -129,7 +131,8 @@ router.get("/page/:numPage", (req, res, next) => {
 })
 
 // xem chi tiết thông tin của một user quyền admin
-router.get("/detail/:id", (req, res, next) => {
+// ok
+router.get("/detail/:id/:token", (req, res, next) => {
     try {
         var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
         var decode = jwt.verify(token, "project2")
@@ -187,7 +190,8 @@ router.get("/detail/:id", (req, res, next) => {
     }
 })
 // thay đổi thông tin theo id quyền admin
-router.put("/:id", (req, res, next) => {
+// ok
+router.put("/:token", (req, res, next) => {
     try {
         var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
         var decode = jwt.verify(token, "project2")
@@ -246,13 +250,14 @@ router.put("/:id", (req, res, next) => {
     }
 }, (req, res) => {
     try {
+        var id = req.body.id
         var email = req.body.email
         var username = req.body.username
         var phone = req.body.phone
         var password = req.body.password
         bcrypt.hash(password, saltRounds, function(err, hash) {
             var obj = { email, username, phone, password: hash}
-            user.updateUser(req.params.id,obj)
+            user.updateUser(id, obj)
             .then((data) => {
                 return res.json({
                     error: false,
@@ -274,7 +279,8 @@ router.put("/:id", (req, res, next) => {
     }
 })
 // xóa thông tin theo id quyền admin
-router.delete("/:id", (req, res, next) => {
+// ok
+router.delete("/:token", (req, res, next) => {
     try {
         var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
         var decode = jwt.verify(token, "project2")
@@ -311,11 +317,12 @@ router.delete("/:id", (req, res, next) => {
     }
 }, (req, res) => {
     try {
-        user.deleteUser(req.params.id)
+        user.deleteUser(req.body.id)
         .then((data) => {
             return res.json({
                 error: false,
-                message: "xóa dữ liệu thành công"
+                message: "xóa dữ liệu thành công",
+                value: 1
             })        
         }).catch((err) => {
             return res.json({
