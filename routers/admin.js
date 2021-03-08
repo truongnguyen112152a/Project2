@@ -191,7 +191,7 @@ router.get("/detail/:id/:token", (req, res, next) => {
 })
 // thay đổi thông tin theo id quyền admin
 // ok
-router.put("/:token", (req, res, next) => {
+router.put("/:id/:token", (req, res, next) => {
     try {
         var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
         var decode = jwt.verify(token, "project2")
@@ -229,13 +229,15 @@ router.put("/:token", (req, res, next) => {
 }, (req, res, next) => {
     try {
         var email = req.body.email
-        user.getEmail(email)
+        user.getUserAll()
         .then((data) => {
-            if(!data.length) return next()
-            return res.json({
-                error: true,
-                message: "email này đã tồn tại"
-            })
+            for(let i = 0; i < data.length; i++) {
+                if(email === data[i].email) return res.json({
+                    error: true,
+                    message: "email này đã tồn tại"
+                })
+            }
+            return next()
         }).catch((err) => {
             return res.json({
                 error: true,
@@ -250,7 +252,7 @@ router.put("/:token", (req, res, next) => {
     }
 }, (req, res) => {
     try {
-        var id = req.body.id
+        var id = req.params.id
         var email = req.body.email
         var username = req.body.username
         var phone = req.body.phone
@@ -280,7 +282,7 @@ router.put("/:token", (req, res, next) => {
 })
 // xóa thông tin theo id quyền admin
 // ok
-router.delete("/:token", (req, res, next) => {
+router.delete("/:id/:token", (req, res, next) => {
     try {
         var token = req.params.token || req.headers.authorization.split("Bearer ")[1]
         var decode = jwt.verify(token, "project2")
@@ -317,7 +319,7 @@ router.delete("/:token", (req, res, next) => {
     }
 }, (req, res) => {
     try {
-        user.deleteUser(req.body.id)
+        user.deleteUser(req.params.id)
         .then((data) => {
             return res.json({
                 error: false,

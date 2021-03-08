@@ -14,7 +14,7 @@ nếu chưa tồn tại thì next() => mã hóa mật khẩu trước khi đưa 
 
 khi bấm quản lý thông tin 
 - file (/admin) :
-    + get("/:token") lấy toàn bộ data nếu (admin)
+    + get("/:token") lấy toàn bộ data (admin)
     + get("/page/:numPage") hiển thị số data trên một page (admin)
     + get("/detail/:id") hiển thị chi tiết theo id (admin)
     + put("/:id") cập nhật thông tin theo id (admin)

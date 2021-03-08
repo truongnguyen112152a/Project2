@@ -30,15 +30,17 @@
             <div class="data-user">Quản lý thông tin</div>
             <div class="data-book">Quản lý thư viện</div>
         </div> 
+    <!-- Thông tin user -->
         <div class="content content-infor hide">
-            <!-- Button trigger modal -->
-            <!-- <div class="btn-header">
+        <!-- nút tạo mới và tạo tự động data -->
+            <div class="btn-header">
                 <button onclick="autoData()" type="button" class="btn btn-outline-secondary">Tạo tự động</button>
+                <!-- Button on off modal -->
                 <button id="btn-create" type="button" class="btn btn-info" data-toggle="modal"
-                data-target="#exampleModal" onclick="toAdd()">
+                data-target="#modalCreate" onclick="toAdd()">
                     Tạo mới
                 </button>
-            </div> -->
+            </div>
             <div class="content-table">
                 <table class="table table-borderless">
                     <thead>
@@ -46,11 +48,10 @@
                             <th scope="col">STT</th>
                             <th scope="col">Email</th>
                             <th scope="col">Username</th>
-                            <th scope="col">ID</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
-                    <tbody id="list-user">
+                    <tbody id="list-user-data">
                         <!--thêm data-->
                     </tbody>
                 </table>
@@ -65,6 +66,7 @@
                 </div>
             </div>
         </div> 
+    <!-- Thông tin book -->
         <div class="content content-book hide">
             <!-- Button trigger modal -->
             <div class="btn-header">
@@ -84,7 +86,7 @@
                             <th scope="col"></th>
                         </tr>
                     </thead>
-                    <tbody id="list-user">
+                    <tbody id="list-user-book">
                         <!--thêm data-->
                     </tbody>
                 </table>
@@ -98,10 +100,82 @@
                     <button id="idNext" type="button" class="btn btn-outline-secondary" onclick="myNext()">></button>
                 </div>
             </div>
-        </div>    
+        </div> 
+    <!-- Thông tin chi tiết --> 
+        <div class="detail hide">
+            <button id="back" type="button" class="btn btn-primary">Trở lại</button>
+            <div class="detail-table">
+                <table class="table table-borderless">
+                    <thead>
+                    <tr class="table-secondary">
+                        <th scope="col">Email</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="list-user-detail">
+                        <!-- Thêm phần detail -->
+                    </tbody>
+                </table>
+            </div>
+            <!-- Modal thay đổi data -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table>
+                                <tr>
+                                    <td>
+                                        Email:
+                                    </td>
+                                    <td>
+                                        <input id="email" class="input-text" type="text">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Username:
+                                    </td>
+                                    <td>
+                                        <input id="username" class="input-text" type="text">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Phone:
+                                    </td>
+                                    <td>
+                                        <input id="phone" class="input-text" type="text">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Password:
+                                    </td>
+                                    <td>
+                                        <input id="password" class="input-text" type="text">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                            <button type="button" id="create-user" class="btn btn-primary" data-dismiss="modal" onclick="doneChange()">Hoàn tất</button>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </div>
     </div> 
-    <!-- Modal -->
-    <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Modal tạo mới data -->
+    <div class="modal fade" id="modalCreate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -117,7 +191,7 @@
                                 Email:
                             </td>
                             <td>
-                                <input id="int-email" class="input-text" type="text">
+                                <input id="add-email" class="input-text" type="text">
                             </td>
                         </tr>
                         <tr>
@@ -125,7 +199,7 @@
                                 Username:
                             </td>
                             <td>
-                                <input id="int-username" class="input-text" type="text">
+                                <input id="add-username" class="input-text" type="text">
                             </td>
                         </tr>
                         <tr>
@@ -133,7 +207,7 @@
                                 Phone:
                             </td>
                             <td>
-                                <input id="int-phone" class="input-text" type="text">
+                                <input id="add-phone" class="input-text" type="text">
                             </td>
                         </tr>
                         <tr>
@@ -141,7 +215,7 @@
                                 Password:
                             </td>
                             <td>
-                                <input id="int-password" class="input-text" type="text">
+                                <input id="add-password" class="input-text" type="text">
                             </td>
                         </tr>
                     </table>
@@ -152,76 +226,59 @@
                 </div>
             </div>
         </div>
-    </div> -->
-    <div class="detail hide">
-        <button id="back" type="button" class="btn btn-primary">Trở lại</button>
-        <div class="detail-table">
-            <table class="table table-borderless">
-                <thead>
-                <tr class="table-secondary">
-                    <th scope="col">Email</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col"></th>
-                </tr>
-                </thead>
-                <tbody id="list-user">
-                </tbody>
-            </table>
-        </div>
-        <!--modal-->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <table>
-                            <tr>
-                                <td>
-                                    Email:
-                                </td>
-                                <td>
-                                    <input id="email" class="input-text" type="text">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Username:
-                                </td>
-                                <td>
-                                    <input id="username" class="input-text" type="text">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Phone:
-                                </td>
-                                <td>
-                                    <input id="phone" class="input-text" type="text">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Password:
-                                </td>
-                                <td>
-                                    <input id="password" class="input-text" type="text">
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                        <button type="button" id="create-user" class="btn btn-primary" data-dismiss="modal" onclick="doneChange()">Hoàn tất</button>
-                    </div>
+    </div>
+<!-- Modal thay đổi data -->
+    <div class="modal fade" id="modalChange" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td>
+                                Email:
+                            </td>
+                            <td>
+                                <input id="change-email" class="input-text" type="text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Username:
+                            </td>
+                            <td>
+                                <input id="change-username" class="input-text" type="text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Phone:
+                            </td>
+                            <td>
+                                <input id="change-phone" class="input-text" type="text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Password:
+                            </td>
+                            <td>
+                                <input id="change-password" class="input-text" type="text">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" id="create-user" class="btn btn-primary" data-dismiss="modal" onclick="doneChange()">Done</button>
                 </div>
             </div>
-        </div>    
+        </div>
     </div>
 </body>
 <script src="/js/admin.js"></script>

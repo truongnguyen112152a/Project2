@@ -5,7 +5,7 @@ const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const user = require('../services/userService')
 
-// đăng ký quyền user
+// đăng ký quyền user(admin có thể tạo data thông qua api này)
 // ok
 router.post("/sign-up",(req, res, next) => {
     try {

@@ -14,6 +14,8 @@ let pageTab = 4
 let arrTab = [1]
 // lưu tổng số trang
 let totalPage = [1]
+// lưu số trang hiện tại khi load page
+let arrCurrentLoad = [1]
 // lưu số trang hiện tại
 let arrCurrentPage = [1, 0]
 // lưu số trang hiện tại để Next
@@ -64,17 +66,77 @@ function showAllData() {
             let totalTab = Math.ceil(sumPage / pageTab)
             // lưu tổng số tab vào mảng 
             arrTab.push(totalTab)
-            $("#list-user").empty()
+            // kiểm tra mảng lưu số trang khi load
+            if(arrCurrentLoad.length >= 2) arrCurrentLoad.pop()
+            // lưu tổng số tab vào mảng 
+            arrCurrentLoad.push(1)
+            $("#list-user-data").empty()
             stt = 1
             if (!data.error) {
                 for (i in data.value) {
-                    $("#list-user").append(
+                    $("#list-user-data").append(
                         `
                         <tr class="table-light">
                             <th id="stt" scope="row">${stt++}</th>
                             <td>${data.value[i].email}</td>
                             <td>${data.value[i].username}</td>
-                            <td>${data.value[i]._id}</td>
+                            <td>
+                                <button onclick=myDetail('${data.value[i]._id}') type="button" class="btn btn-warning">Chi tiết</button>
+                                <button onclick=myDelete('${data.value[i]._id}') type="button" class="btn btn-danger">Xóa</button>
+                            </td>
+                        </tr>
+                    `
+                    )
+                    // thêm giá trị đạt đến giới hạn data trên một trang
+                    if (stt === (numPage + 1)) return null
+                }
+            }
+        }).catch((err) => {
+            alert(err)
+        });
+}
+
+// lấy toàn bộ book
+function showAllBook() {
+    var token = getCookie("token")
+    $.ajax({
+        url: "/adminBook/" + token,
+        method: "GET",
+        headers: {
+            "authorization" : "Bearer " + token
+        }
+    })
+        .then((data) => {
+            // tạo tự động data
+            countData(data.value.length)
+            // chia số page hiển thị dữ liệu (làm tròn lên) => tổng số trang
+            let sumPage = Math.ceil(data.value.length / numPage)
+            // kiểm tra mảng lưu tổng số trang
+            if(totalPage.length >= 2) totalPage.pop()
+            // lưu tổng số trang vào mảng
+            totalPage.push(sumPage)
+            // hiển số page trên một tab
+            numPageOnTab(totalPage[1], 1)
+            // kiểm tra mảng lưu tổng số tab
+            if(arrTab.length >= 2) arrTab.pop()
+            // chia tổng số trang cho số trang trên một tab => tổng số tab
+            let totalTab = Math.ceil(sumPage / pageTab)
+            // lưu tổng số tab vào mảng 
+            arrTab.push(totalTab)
+            // kiểm tra mảng lưu số trang khi load
+            if(arrCurrentLoad.length >= 2) arrCurrentLoad.pop()
+            // lưu tổng số tab vào mảng 
+            arrCurrentLoad.push(1)
+            $("#list-user-data").empty()
+            stt = 1
+            if (!data.error) {
+                for (i in data.value) {
+                    $("#list-user-data").append(
+                        `
+                        <tr class="table-light">
+                            <th id="stt" scope="row">${stt++}</th>
+                            <td>${data.value[i].email}</td>
+                            <td>${data.value[i].username}</td>
                             <td>
                                 <button onclick=myDetail('${data.value[i]._id}') type="button" class="btn btn-warning">Chi tiết</button>
                                 <button onclick=myDelete('${data.value[i]._id}') type="button" class="btn btn-danger">Xóa</button>
@@ -92,24 +154,23 @@ function showAllData() {
 }
 
 // hiển thị theo số trang
-function showDataOfPage() {
+function showDataOfPage(data) {
     var token = getCookie("token")
     $.ajax({
         url: "/admin/page/" + arrCurrentPage[1] + "/" + token,
         method: "GET"
     })
         .then((data) => {
-            $("#list-user").empty()
+            $("#list-user-data").empty()
             stt = arrCurrentPage[1] * numPage - numPage + 1
             if (!data.error) {
                 for (i in data.value) {
-                    $("#list-user").append(
+                    $("#list-user-data").append(
                         `
                             <tr class="table-light">
                                 <th id="stt" scope="row">${stt++}</th>
                                 <td>${data.value[i].email}</td>
                                 <td>${data.value[i].username}</td>
-                                <td>${data.value[i]._id}</td>
                                 <td>
                                     <button onclick=myDetail('${data.value[i]._id}') type="button" class="btn btn-warning">Chi tiết</button>
                                     <button onclick=myDelete('${data.value[i]._id}') type="button" class="btn btn-danger">Xóa</button>
@@ -189,18 +250,20 @@ function currentPage(data) {
 
 // chuyển trang
 function myPage() {
+    if(arrCurrentLoad.length >= 2) arrCurrentLoad.pop()
     removeCssBtn()
     let numPage = $(this).text()
     currentPage(numPage)
     $(this).addClass("bg-button")
+    if(numPage === 1) return showAllData()
     return showDataOfPage()
 }
 
 // chuyển đến phần detail
 function myDetail(data) {
-    $(".parent").addClass("hide")
+    $(".content-infor").addClass("hide")
     $(".detail").removeClass("hide")
-    $("#list-user").empty()
+    $("#list-user-detail").empty()
     var token = getCookie("token")
     $.ajax({
         url: "/admin/detail/" + data  + "/" + token,
@@ -208,14 +271,14 @@ function myDetail(data) {
     })
     .then((data) => {
         if(!data.error) {
-            $("#list-user").append(
+            $("#list-user-detail").append(
                 `
                     <tr class="table-primary">
                         <td class="add-class">${data.value[0].email}</td>
                         <td class="add-class">${data.value[0].username}</td>
                         <td class="add-class">${data.value[0].phone}</td>
                         <td>
-                            <button onclick=myChange('${data.value[0]._id}') id="btn-create" type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal">Thay đổi</button>
+                            <button onclick=myChange('${data.value[0]._id}') id="btn-change" type="button" class="btn btn-info" data-toggle="modal" data-target="#modalChange">Thay đổi</button>
                         </td>
                     </tr>
                 `
@@ -225,31 +288,39 @@ function myDetail(data) {
         alert(err)
     });
 }
-function myChange() {
+// thay đổi thông tin
+// lưu ID khi thay đổi data
+var arrIdToChange = [1]
+function myChange(data) {
+    if(arrIdToChange.length >= 2) arrIdToChange.pop()
+    arrIdToChange.push(data)
     let arrEmail = $(".add-class")
     let arrSum = []
     for(let i = 0; i < arrEmail.length; i++) {
     arrSum.push(arrEmail[i].textContent)
     }
-    $("#email").val(`${arrSum[0]}`)
-    $("#username").val(`${arrSum[1]}`)
-    $("#phone").val(`${arrSum[2]}`)
-    $("#phone").val()
+    $("#change-email").val(`${arrSum[0]}`)
+    $("#change-username").val(`${arrSum[1]}`)
+    $("#change-phone").val(`${arrSum[2]}`)
+    $("#change-password").val("")
 }
+
+// hoàn thành thay đổi
 function doneChange() {
-    let email = $("#email").val().trim()
-    let username = $("#username").val().trim()
-    let phone = $("#phone").val().trim()
-    let password = $("#password").val().trim()
+    var token = getCookie("token")
+    let email = $("#change-email").val().trim()
+    let username = $("#change-username").val().trim()
+    let phone = $("#change-phone").val().trim()
+    let password = $("#change-password").val().trim()
     if(!(email && username && phone && password)) {
-        return alert("không được để trống")
+        return alert("không được để trống change")
     }
     if(!(((!isNaN(phone)) && typeof Number(phone) === "number") &&
     ((!isNaN(password)) && typeof Number(password) === "number"))) {            
         return alert("phone và password phải là số")
     }
     $.ajax({
-        url: "/user/" + urlId,
+        url: "/admin/" + arrIdToChange[1] + "/" + token,
         method: "PUT",
         data: {
             email,
@@ -259,30 +330,33 @@ function doneChange() {
         }
     })
     .then((data) => {
+        // chưa hiển thị chi tiết
         if(!data.error) {
-            alert(data.messenger)
-            return myDetail()
+            alert(data.message)
+            return myDetail(arrIdToChange[1])
         }
-        return alert(data.messenger)
+        return alert(data.message)
     }).catch((err) => {
         alert(err)
     });
 }
 $("#back").click(() => {
     $(".detail").addClass("hide")
-    $(".parent").removeClass("hide")
-    return showAllData()
+    $(".content-infor").removeClass("hide")
+    if(arrCurrentLoad[1] === 1) return showAllData()
+    return showDataOfPage()
 })
 // xóa data
 function myDelete(data) {
+    var token = getCookie("token")
     if(confirm("Bạn có muốn xóa không ?") == true) {
         $.ajax({
-            url: "/user/" + data,
+            url: "/admin/" + data + "/" + token,
             method: "DELETE"
         })
         .then((data) => {
             if(!data.error) {
-                alert("xóa dữ liệu thành công")
+                alert(data.message)
                 return showDataOfPage()
             }
         }).catch((err) => {
@@ -295,30 +369,29 @@ function myDelete(data) {
 function sumArr(data) {
     if (data.length === 2) data.pop()
     if (data.length > 2) return 1
-    return data.push(2)
+    return data.push(1)
 }
 function subArr(data) {
-    if (data.length === 2) return data.pop()
+    if (data.length >= 2) return data.pop()
 }
-// chọn thay đổi
+// chọn add
 function toAdd() {
-    if (arrAdd.length !== 2) {
-        $("#int-email").val("")
-        $("#int-username").val("")
-        $("#int-phone").val("")
-        $("#int-school").val("")
-        $("#int-password").val("")
+    if (arrAdd.length >= 2) {
+        $("#add-email").val("")
+        $("#add-username").val("")
+        $("#add-phone").val("")
+        $("#add-school").val("")
+        $("#add-password").val("")
     }
 }
-// click thay đổi trên ô modal
+// chọn tạo data
 function doneAdd() {
-    let email = $("#int-email").val()
-    let username = $("#int-username").val()
-    let phone = $("#int-phone").val()
-    let school = $("#int-school").val()
-    let password = $("#int-password").val()
-    if (!(email && username && phone && school && password)) {
-        alert("không được để trống")
+    let email = $("#add-email").val().trim()
+    let username = $("#add-username").val().trim()
+    let phone = $("#add-phone").val().trim()
+    let password = $("#add-password").val().trim()
+    if (!(email && username && phone && password)) {
+        alert("không được để trống add")
         return sumArr(arrAdd)
     }
     if (!(((!isNaN(phone)) && typeof Number(phone) === "number") &&
@@ -327,24 +400,23 @@ function doneAdd() {
         return sumArr(arrAdd)
     }
     $.ajax({
-        url: "/user",
+        url: "/user/sign-up",
         method: "POST",
         data: {
             email,
             username,
             phone,
-            school,
             password
         }
     })
         .then((data) => {
             if (!data.error) {
-                alert("tạo dữ liệu thành công")
+                alert(data.message)
                 showDataOfPage()
-                return subArr(arrAdd)
+                return sumArr(arrAdd)
             }
-            alert("email này đã tồn tại")
-            return sumArr(arrAdd)
+            alert(data.message)
+            return subArr(arrAdd)
         }).catch((err) => {
             alert(err)
         });
@@ -396,7 +468,7 @@ function autoData() {
                 if (!data.error) {
                     return showDataOfPage()
                 }
-                alert("tạo tự động data")
+                alert(data.message)
                 return window.location.href = window.location.href
             }).catch((err) => {
                 alert(err)

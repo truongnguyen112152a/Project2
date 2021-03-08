@@ -26,11 +26,17 @@ function getEmail(email) {
         email: email
     })
 }
+function getChangeEmail(email) {
+    return userModel.find({
+        email: { $ne : email}
+    })
+}
 module.exports = {
     getUserAll,
     getUserId,
     createUser,
     updateUser,
     deleteUser,
-    getEmail
+    getEmail,
+    getChangeEmail
 }
