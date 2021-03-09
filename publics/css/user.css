@@ -135,9 +135,6 @@
     background: #6c757d;
     color: white;
 }
-.book-number-page button {
-    margin-right: 10px;
-}
 .detail {
     position: fixed;
     margin-top: 70px;
@@ -146,6 +143,9 @@
 }
 #back {
     margin-bottom: 10px;
+}
+#change-name {
+    margin-left: 10px;
 }
 td input {
     margin-left: 10px;

@@ -11,7 +11,7 @@ function mySignUp() {
         return alert("phone và password phải là số")
     }
     $.ajax({
-        url: "/user/sign-up",
+        url: "/author/sign-up",
         method: "POST",
         data: {
             email,
@@ -22,10 +22,10 @@ function mySignUp() {
     })
         .then((data) => {
             if (!data.error) {
-                alert(data.messenger)
+                alert(data.message)
                 return window.location.href = "/login"
             }
-            return alert(data.messenger)
+            return alert(data.message)
         }).catch((err) => {
             alert(err)
         });

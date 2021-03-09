@@ -1,7 +1,9 @@
 const userModel = require('../models/userModel')
 
-function getUserAll() {
-    return userModel.find()
+function getUserAll(id) {
+    return userModel.find({
+        _id: { $ne : id}
+    })
 }
 function getUserId(id) {
     return userModel.find({

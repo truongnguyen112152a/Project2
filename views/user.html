@@ -17,11 +17,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
         integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/user.css">
 </head>
 <body class="body-admin">
     <div class="header">
-        <div style="color: #130f40;" class="user">Admin</div>
+        <div style="color: #130f40;" class="user"></div>
         <div><button id="logout" type="button" class="btn btn-outline-primary">Đăng xuất</button></div>
     </div>
     <div class="parent">
@@ -29,48 +29,12 @@
             <div class="data-user">Quản lý thông tin</div>
             <div class="data-book">Quản lý thư viện</div>
         </div> 
-    <!-- Thông tin user -->
-        <div class="content content-infor">
-        <!-- nút tạo mới và tạo tự động data -->
-            <div class="btn-header">
-                <!-- <button onclick="autoData()" type="button" class="btn btn-outline-secondary">Tạo tự động</button> -->
-                <!-- Button on off modal -->
-                <button id="btn-create" type="button" class="btn btn-info" data-toggle="modal"
-                data-target="#modalCreate" onclick="toAdd()">
-                    Tạo mới
-                </button>
-            </div>
-            <div class="content-table">
-                <table class="table table-borderless">
-                    <thead>
-                        <tr class="table-info">
-                            <th scope="col">STT</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Username</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="list-user-data">
-                        <!--thêm data-->
-                    </tbody>
-                </table>
-            </div>
-            <div class="btn-footer">
-                <div class="change-tab">
-                    <button id="idBack" type="button" class="btn btn-outline-secondary" onclick="myBack()"><</button>
-                    <div class="number-page">
-                        <!--thêm button đánh số trang-->
-                    </div>
-                    <button id="idNext" type="button" class="btn btn-outline-secondary" onclick="myNext()">></button>
-                </div>
-            </div>
-        </div> 
     <!-- Thông tin book -->
         <div class="content content-book hide">
             <!-- Button trigger modal -->
             <div class="btn-header">
                 <button id="btn-create" type="button" class="btn btn-info" data-toggle="modal"
-                data-target="#exampleModal" onclick="toAdd()">
+                data-target="#modalAdd" onclick="toAdd()">
                     Tạo mới
                 </button>
             </div>
@@ -79,8 +43,8 @@
                     <thead>
                         <tr class="table-info">
                             <th scope="col">STT</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Book</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Timer</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -89,23 +53,13 @@
                     </tbody>
                 </table>
             </div>
-            <div class="btn-footer">
-                <div class="change-tab">
-                    <button id="idBack" type="button" class="btn btn-outline-secondary" onclick="myBack()"><</button>
-                    <div class="book-number-page">
-                        <!--thêm button đánh số trang-->
-                    </div>
-                    <button id="idNext" type="button" class="btn btn-outline-secondary" onclick="myNext()">></button>
-                </div>
-            </div>
         </div> 
     <!-- Thông tin chi tiết --> 
         <div class="detail hide">
-            <button id="back" type="button" class="btn btn-primary">Trở lại</button>
             <div class="detail-table">
                 <table class="table table-borderless">
                     <thead>
-                    <tr class="table-secondary">
+                    <tr class="table-info">
                         <th scope="col">Email</th>
                         <th scope="col">Username</th>
                         <th scope="col">Phone</th>
@@ -116,11 +70,11 @@
                         <!-- Thêm phần detail -->
                     </tbody>
                 </table>
-            </div>   
+            </div>  
         </div>
     </div> 
-<!-- Modal tạo mới data -->
-    <div class="modal fade" id="modalCreate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Modal thay đổi data -->
+    <div class="modal fade" id="modalChange" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -167,17 +121,17 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                    <button type="button" id="create-user" class="btn btn-primary" data-dismiss="modal" onclick="doneAdd()">Done</button>
+                    <button type="button" id="create-user" class="btn btn-primary" data-dismiss="modal" onclick="doneChange()">Done</button>
                 </div>
             </div>
         </div>
     </div>
-<!-- Modal thay đổi data -->
-    <div class="modal fade" id="modalChange" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Modal tạo mới book -->
+    <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Thay đổi thông tin</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Tạo mới book</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -186,45 +140,21 @@
                     <table>
                         <tr>
                             <td>
-                                Email:
+                                Name:    
                             </td>
                             <td>
-                                <input id="change-email" class="input-text" type="text">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Username:
-                            </td>
-                            <td>
-                                <input id="change-username" class="input-text" type="text">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Phone:
-                            </td>
-                            <td>
-                                <input id="change-phone" class="input-text" type="text">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Password:
-                            </td>
-                            <td>
-                                <input id="change-password" class="input-text" type="text">
+                                <input id="add-name" class="input-text" type="text">
                             </td>
                         </tr>
                     </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                    <button type="button" id="create-user" class="btn btn-primary" data-dismiss="modal" onclick="doneChange()">Done</button>
+                    <button type="button" id="create-user" class="btn btn-primary" data-dismiss="modal" onclick="doneAdd()">Done</button>
                 </div>
             </div>
         </div>
     </div>
 </body>
-<script src="/js/admin.js"></script>
+<script src="/js/user.js"></script>
 </html>

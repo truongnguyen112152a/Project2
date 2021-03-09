@@ -3,7 +3,7 @@ function myLogin() {
     var password = $("#intPassword").val().trim()
     if(email && password) {
         return $.ajax({
-            url: "/user/login",
+            url: "/author/login",
             method: "POST",
             data: {
                 email,
@@ -14,8 +14,8 @@ function myLogin() {
             if(!data.error) {
                 setCookie("token", data.token, 1.2)
                 alert(data.message)
-                if(data.value) return window.location.href = "/home-admin"
-                return alert("bạn không phải admin")
+                if(data.value) return window.location.href = "/admin"
+                return window.location.href = "/user"
             }
             alert(data.message)
             if(confirm("bạn có muốn đăng ký") == true) {
