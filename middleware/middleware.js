@@ -77,7 +77,7 @@ function checkEmail(req, res, next) {
 
 function checkBook(req, res, next) {
     try {
-        var email = req.email
+        var email = req.email || req.body.email
         var name = req.body.name
         book.getEmail(email)
         .then((data) => {

@@ -70,7 +70,7 @@
             <!-- Button trigger modal -->
             <div class="btn-header">
                 <button id="btn-create" type="button" class="btn btn-info" data-toggle="modal"
-                data-target="#exampleModal" onclick="toAddBook()">
+                data-target="#modalAddBook" onclick="toAddBook()">
                     Tạo mới
                 </button>
             </div>
@@ -105,7 +105,7 @@
             <div class="detail-table">
                 <table class="table table-borderless">
                     <thead>
-                    <tr class="table-secondary">
+                    <tr class="table-success">
                         <th scope="col">Email</th>
                         <th scope="col">Username</th>
                         <th scope="col">Phone</th>
@@ -124,7 +124,7 @@
             <div class="detail-table">
                 <table class="table table-borderless">
                     <thead>
-                    <tr class="table-secondary">
+                    <tr class="table-info">
                         <th scope="col">STT</th>
                         <th scope="col">Name</th>
                         <th scope="col">Time</th>
@@ -244,7 +244,72 @@
             </div>
         </div>
     </div>
+<!-- Modal tạo mới book -->
+    <div class="modal fade" id="modalAddBook" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tạo mới Book</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td>
+                                Email:
+                            </td>
+                            <td>
+                                <input id="add-email-book" class="input-text" type="text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Name:
+                            </td>
+                            <td>
+                                <input id="add-name-book" class="input-text" type="text">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" id="add-book" class="btn btn-primary" data-dismiss="modal" onclick="doneAddBook()">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal thay đổi Book -->
+    <div class="modal fade" id="modalChangeBook" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thay đổi Book</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td>
+                                Name:
+                            </td>
+                            <td>
+                                <input id="change-name-book" class="input-text" type="text">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" id="create-user" class="btn btn-primary" data-dismiss="modal" onclick="doneChangeBook()">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 <script src="/js/admin.js"></script>
-<script src="/js/adminBook.js"></script>
 </html>

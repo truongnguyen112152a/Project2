@@ -219,7 +219,7 @@ function myDetail(data) {
         if(!data.error) {
             $("#list-user-detail").append(
                 `
-                    <tr class="table-primary">
+                    <tr class="table-light">
                         <td class="add-class">${data.value[0].email}</td>
                         <td class="add-class">${data.value[0].username}</td>
                         <td class="add-class">${data.value[0].phone}</td>
@@ -391,11 +391,13 @@ function removeCssBtn() {
 // *** Quản lý thư viện
 
 // số book hiển thị trên một page
-var numBook = 5
+var numBook = 6
 // lưu tổng số page
 var totalBook = [1]
 // lưu tổng số tab book
 var arrTabBook = [1]
+// lưu sự thay đổi khi tạo mới book
+var arrAddBook = [1]
 
 
 // lấy toàn bộ book
@@ -503,9 +505,14 @@ function buttonBook(data1,data2) {
     }
 }
 
+// số thứ tự book
 var sttBook = 1
+// lưu email của book khi thay đổi
+var emailBook = [1]
 // hiển thị toàn bộ thư viện của một user
 function myDetailBook(email) {
+    if(emailBook.length >= 2) emailBook.pop()
+    emailBook.push(email)
     $(".content-book").addClass("hide")
     $(".detail-book").removeClass("hide")
     $("#list-book-detail").empty()
@@ -542,10 +549,122 @@ function myDetailBook(email) {
 $("#back-book").click(() => {
     $(".detail-book").addClass("hide")
     $(".detail").addClass("hide")
-    $(".content-infor").removeClass("hide")
+    $(".content-infor").addClass("hide")
+    $(".content-book").removeClass("hide")
     if(arrCurrentLoad[1] === 1) return showAllData()
     return showDataOfPage()
 })
+
+// tạo mới book
+function sumArrBook(data) {
+    if (data.length === 2) data.pop()
+    if (data.length > 2) return 1
+    return data.push(1)
+}
+function subArrBook(data) {
+    if (data.length >= 2) return data.pop()
+}
+// chọn add book
+function toAddBook() {
+    if (arrAddBook.length >= 2) {
+        $("#add-email-book").val("")
+        $("#add-name-book").val("")
+    }
+}
+// chọn tạo book
+function doneAddBook() {
+    let email = $("#add-email-book").val().trim()
+    let name = $("#add-name-book").val().trim()
+    let date = new Date()
+    let arrTime = date.toString().split(" ")
+    let time = arrTime[4] + "/" + arrTime[0] + "/" + arrTime[2] + "/" + arrTime[1] + "/" + arrTime[3]
+    var token = getCookie("token")
+    $.ajax({
+        url: "/book/" + token,
+        method: "POST",
+        data: {
+            email,
+            name,
+            time
+        }
+    })
+        .then((data) => {
+            if (!data.error) {
+                alert(data.message)
+                showAllBook()
+                return sumArrBook(arrAddBook)
+            }
+            alert(data.message)
+            return subArrBook(arrAddBook)
+        }).catch((err) => {
+            alert(err)
+        });
+}
+
+// thay đổi book
+// lưu ID khi thay đổi data
+var idToChangeBook = [1]
+function myChangeBook(id, name) {
+    if(idToChangeBook.length >= 2) idToChangeBook.pop()
+    idToChangeBook.push(id)
+    $("#change-name-book").val(`${name}`)
+}
+
+// hoàn thành thay đổi
+function doneChangeBook() {
+    var token = getCookie("token")
+    let id = idToChangeBook[1]
+    let name = $("#change-name-book").val().trim()
+    let date = new Date()
+    let arrTime = date.toString().split(" ")
+    let time = arrTime[4] + "/" + arrTime[0] + "/" + arrTime[2] + "/" + arrTime[1] + "/" + arrTime[3]
+    if(!name) {
+        return alert("không được để trống add")
+    }
+    $.ajax({
+        url: "/book/" + token,
+        method: "PUT",
+        data: {
+            id,
+            name,
+            time
+        }
+    })
+    .then((data) => {
+        if(!data.error) {
+            alert(data.message)
+            showAllBook()
+            return myDetailBook(emailBook[1])
+        }
+        return alert(data.message)
+    }).catch((err) => {
+        alert(err)
+    });
+}
+
+// xóa book
+function myDeleteBook(val) {
+    var token = getCookie("token")
+    if(confirm("Bạn có muốn xóa không ?") == true) {
+        $.ajax({
+            url: "/book/" + token,
+            method: "DELETE",
+            data: {
+                id: val
+            }
+        })
+        .then((data) => {
+            if(!data.error) {
+                alert(data.message)
+                showAllBook()
+                return myDetailBook(emailBook[1])
+            }
+        }).catch((err) => {
+            alert(err)
+        });
+    }
+}
+
 
 
 // tạo tự động data

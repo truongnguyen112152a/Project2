@@ -7,7 +7,7 @@ const author = require('../middleware/middleware')
 // ok
 router.post("/:token", author.checkAuthor, author.checkBook, (req, res) => {
     try {
-        var email = req.email
+        var email = req.email || req.body.email
         var name = req.body.name
         var time = req.body.time
         var obj = {
