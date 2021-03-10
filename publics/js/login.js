@@ -1,6 +1,6 @@
 function myLogin() {
-    var email = $("#intEmail").val().trim()
-    var password = $("#intPassword").val().trim()
+    var email = $("#email").val().trim()
+    var password = $("#password").val().trim()
     if(email && password) {
         return $.ajax({
             url: "/author/login",

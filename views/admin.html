@@ -43,7 +43,7 @@
             <div class="content-table">
                 <table class="table table-borderless">
                     <thead>
-                        <tr class="table-info">
+                        <tr class="table-success">
                             <th scope="col">STT</th>
                             <th scope="col">Email</th>
                             <th scope="col">Username</th>
@@ -70,7 +70,7 @@
             <!-- Button trigger modal -->
             <div class="btn-header">
                 <button id="btn-create" type="button" class="btn btn-info" data-toggle="modal"
-                data-target="#exampleModal" onclick="toAdd()">
+                data-target="#exampleModal" onclick="toAddBook()">
                     Tạo mới
                 </button>
             </div>
@@ -91,15 +91,15 @@
             </div>
             <div class="btn-footer">
                 <div class="change-tab">
-                    <button id="idBack" type="button" class="btn btn-outline-secondary" onclick="myBack()"><</button>
+                    <button id="idBack" type="button" class="btn btn-outline-secondary" onclick="myBackBook()"><</button>
                     <div class="book-number-page">
                         <!--thêm button đánh số trang-->
                     </div>
-                    <button id="idNext" type="button" class="btn btn-outline-secondary" onclick="myNext()">></button>
+                    <button id="idNext" type="button" class="btn btn-outline-secondary" onclick="myNextBook()">></button>
                 </div>
             </div>
         </div> 
-    <!-- Thông tin chi tiết --> 
+    <!-- Thông tin chi tiết user --> 
         <div class="detail hide">
             <button id="back" type="button" class="btn btn-primary">Trở lại</button>
             <div class="detail-table">
@@ -113,6 +113,25 @@
                     </tr>
                     </thead>
                     <tbody id="list-user-detail">
+                        <!-- Thêm phần detail -->
+                    </tbody>
+                </table>
+            </div>   
+        </div>
+    <!-- Thông tin chi tiết book --> 
+        <div class="detail-book hide">
+            <button id="back-book" type="button" class="btn btn-primary">Trở lại</button>
+            <div class="detail-table">
+                <table class="table table-borderless">
+                    <thead>
+                    <tr class="table-secondary">
+                        <th scope="col">STT</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Time</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="list-book-detail">
                         <!-- Thêm phần detail -->
                     </tbody>
                 </table>
@@ -227,4 +246,5 @@
     </div>
 </body>
 <script src="/js/admin.js"></script>
+<script src="/js/adminBook.js"></script>
 </html>

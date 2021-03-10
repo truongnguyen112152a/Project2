@@ -34,7 +34,7 @@
             <!-- Button trigger modal -->
             <div class="btn-header">
                 <button id="btn-create" type="button" class="btn btn-info" data-toggle="modal"
-                data-target="#modalAdd" onclick="toAdd()">
+                data-target="#modalAddBook" onclick="toAddBook()">
                     Tạo mới
                 </button>
             </div>
@@ -44,7 +44,7 @@
                         <tr class="table-info">
                             <th scope="col">STT</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Timer</th>
+                            <th scope="col">Time</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -59,7 +59,7 @@
             <div class="detail-table">
                 <table class="table table-borderless">
                     <thead>
-                    <tr class="table-info">
+                    <tr class="table-success">
                         <th scope="col">Email</th>
                         <th scope="col">Username</th>
                         <th scope="col">Phone</th>
@@ -127,7 +127,7 @@
         </div>
     </div>
 <!-- Modal tạo mới book -->
-    <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalAddBook" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -143,14 +143,43 @@
                                 Name:    
                             </td>
                             <td>
-                                <input id="add-name" class="input-text" type="text">
+                                <input id="add-name-book" class="input-text" type="text">
                             </td>
                         </tr>
                     </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                    <button type="button" id="create-user" class="btn btn-primary" data-dismiss="modal" onclick="doneAdd()">Done</button>
+                    <button type="button" id="create-user" class="btn btn-primary" data-dismiss="modal" onclick="doneAddBook()">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Modal thay đổi book -->
+    <div class="modal fade" id="modalChangeBook" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tạo mới thông tin</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td>
+                                Name:
+                            </td>
+                            <td>
+                                <input id="change-name-book" class="input-text" type="text">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" id="create-user" class="btn btn-primary" data-dismiss="modal" onclick="doneChangeBook()">Done</button>
                 </div>
             </div>
         </div>

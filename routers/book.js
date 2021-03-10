@@ -81,6 +81,49 @@ router.get("/:token", author.checkAuthor, (req, res) => {
     }
 })
 
+router.get("/detail/:email/:token", author.checkAuthor, (req, res) => {
+    try {
+        if(req.author) {
+            return book.getEmail(req.params.email)
+            .then((data) => {
+                res.json({
+                    error: false,
+                    message: "Tất cả book",
+                    value: data
+                })
+            }).catch((err) => {
+                res.json({
+                    error: true,
+                    message: "lỗi tìm kiếm 1 :" + err
+                })
+            });
+        }
+        return book.getEmail(req.email)
+        .then((data) => {
+            if(data.length) {
+                return res.json({
+                    error: false,
+                    message: "Tất cả book",
+                    value: data
+                })
+            }
+            return res.json({
+                error: true,
+                message: "Bạn chưa có book"
+            })
+        }).catch((err) => {
+            return res.json({
+                error: true,
+                message: "lỗi tìm kiếm 2 :" + err
+            })
+        });
+    } catch (error) {
+        return res.json({
+            err: true,
+            message: "lỗi input 2 :" + error,
+        })
+    }
+})
 // thay đổi thông tin book quyền admin,user
 // ok
 router.put("/:token", author.checkAuthor, author.checkBook, (req, res) => {

@@ -114,7 +114,7 @@ function buttonBook(data1,data2) {
         $(".book-number-page button:first").addClass("bg-button")
     }
 }
-module.exports = {
-    showAllBook,
-    buttonBook
+
+function show() {
+    console.log("ok");
 }

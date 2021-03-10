@@ -25,6 +25,11 @@
         width: 100%;
         margin: 0 !important;
     }
+    .detail-book { 
+        position: static !important;
+        width: 100%;
+        margin: 0 !important;
+    }
     .btn-footer {
         bottom: 20px !important;
     }
@@ -39,6 +44,9 @@
     .detail { 
         width: 75%;
     }
+    .detail-book { 
+        width: 75%;
+    }
 }
 @media (min-width: 1000px) {
     .menu {
@@ -48,6 +56,9 @@
         width: 80%;
     }
     .detail { 
+        width: 80%;
+    }
+    .detail-book { 
         width: 80%;
     }
 }
@@ -144,7 +155,16 @@
     padding: 10px;
     right: 0px;
 }
+.detail-book {
+    position: fixed;
+    margin-top: 70px;
+    padding: 10px;
+    right: 0px;
+}
 #back {
+    margin-bottom: 10px;
+}
+#back-book {
     margin-bottom: 10px;
 }
 td input {

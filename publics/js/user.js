@@ -10,7 +10,7 @@ $(".data-user").click(function() {
     $(".content-book").addClass("hide")
     $(".detail").removeClass("hide")
 })
-$(".data-book").click(function() {
+$(".data-book").click(function() { 
     $(this).addClass("style")
     $(".data-user").removeClass("style")
     $(".detail").addClass("hide")
@@ -18,7 +18,8 @@ $(".data-book").click(function() {
 })
 myDetail()
 showLibrary()
-// Quản lý thông tin
+
+// *** Quản lý thông tin => ok ok
 
 function myDetail() {
     $(".content-infor").addClass("hide")
@@ -61,21 +62,21 @@ function myChange() {
     for(let i = 0; i < arrEmail.length; i++) {
     arrSum.push(arrEmail[i].textContent)
     }
-    $("#change-email").val(`${arrSum[0]}`)
-    $("#change-username").val(`${arrSum[1]}`)
-    $("#change-phone").val(`${arrSum[2]}`)
-    $("#change-password").val("")
+    $("#add-email").val(`${arrSum[0]}`)
+    $("#add-username").val(`${arrSum[1]}`)
+    $("#add-phone").val(`${arrSum[2]}`)
+    $("#add-password").val("")
 }
 
 // hoàn thành thay đổi
 function doneChange(val) {
     var token = getCookie("token")
-    let email = $("#change-email").val().trim()
-    let username = $("#change-username").val().trim()
-    let phone = $("#change-phone").val().trim()
-    let password = $("#change-password").val().trim()
+    let email = $("#add-email").val().trim()
+    let username = $("#add-username").val().trim()
+    let phone = $("#add-phone").val().trim()
+    let password = $("#add-password").val().trim()
     if(!(email && username && phone && password)) {
-        return alert("không được để trống change")
+        return alert("không được để trống add")
     }
     if(!(((!isNaN(phone)) && typeof Number(phone) === "number") &&
     ((!isNaN(password)) && typeof Number(password) === "number"))) {            
@@ -92,10 +93,9 @@ function doneChange(val) {
         }
     })
     .then((data) => {
-        // chưa hiển thị chi tiết
         if(!data.error) {
             alert(data.message)
-            return myDetail(arrIdToChange[1])
+            return myDetail()
         }
         return alert(data.message)
     }).catch((err) => {
@@ -122,9 +122,9 @@ function myDelete(val) {
     }
 }
 
-// Quản lý thư viện
+// *** Quản lý thư viện
 var stt = 1
-
+// hiển thị toàn bộ thư viện
 function showLibrary() {
     $("#list-user-book").empty()
     var token = getCookie("token")
@@ -133,17 +133,18 @@ function showLibrary() {
         method: "GET"
     })
     .then((data) => {
+        stt = 1
         if(!data.error) {
             for(i = 0; i < data.value.length; i++) {
                 $("#list-user-book").append(
                     `
                         <tr class="table-light">
-                            <td class="add-class">${stt++}</td>
-                            <td class="add-class">${data.value[i].name}</td>
-                            <td class="add-class">${data.value[i].time}</td>
+                            <td class="add-class-book">${stt++}</td>
+                            <td class="add-class-book">${data.value[i].name}</td>
+                            <td class="add-class-book">${data.value[i].time}</td>
                             <td>
-                                <button onclick=myChange('123') id="btn-change" type="button" class="btn btn-info" data-toggle="modal" data-target="#modalChange">Thay đổi</button>
-                                <button onclick=myDelete('123') type="button" class="btn btn-danger">Xóa</button>
+                                <button onclick="myChangeBook('${data.value[i]._id}', '${data.value[i].name}')" id="btn-change" type="button" class="btn btn-info" data-toggle="modal" data-target="#modalChangeBook">Thay đổi</button>
+                                <button onclick=myDeleteBook('${data.value[i]._id}') type="button" class="btn btn-danger">Xóa</button>
                             </td>
                         </tr>
                     `
@@ -156,7 +157,7 @@ function showLibrary() {
     });
 }
 
-// tạo mới data
+// tạo mới book
 function sumArr(data) {
     if (data.length === 2) data.pop()
     if (data.length > 2) return 1
@@ -165,16 +166,16 @@ function sumArr(data) {
 function subArr(data) {
     if (data.length >= 2) return data.pop()
 }
-// chọn add
-function toAdd() {
+// chọn add book
+function toAddBook() {
     if (arrAdd.length >= 2) {
-        $("#add-name").val("")
+        $("#add-name-book").val("")
     }
 }
-// chọn tạo data
-function doneAdd() {
+// chọn tạo book
+function doneAddBook() {
     let email = arrEmail[1]
-    let name = $("#add-name").val().trim()
+    let name = $("#add-name-book").val().trim()
     let date = new Date()
     let arrTime = date.toString().split(" ")
     let time = arrTime[4] + "/" + arrTime[0] + "/" + arrTime[2] + "/" + arrTime[1] + "/" + arrTime[3]
@@ -199,6 +200,68 @@ function doneAdd() {
         }).catch((err) => {
             alert(err)
         });
+}
+
+// thay đổi book
+// lưu ID khi thay đổi data
+var arrIdToChange = [1]
+function myChangeBook(id, name) {
+    if(arrIdToChange.length >= 2) arrIdToChange.pop()
+    arrIdToChange.push(id)
+    $("#change-name-book").val(`${name}`)
+}
+
+// hoàn thành thay đổi
+function doneChangeBook() {
+    var token = getCookie("token")
+    let id = arrIdToChange[1]
+    let name = $("#change-name-book").val().trim()
+    let date = new Date()
+    let arrTime = date.toString().split(" ")
+    let time = arrTime[4] + "/" + arrTime[0] + "/" + arrTime[2] + "/" + arrTime[1] + "/" + arrTime[3]
+    if(!name) {
+        return alert("không được để trống add")
+    }
+    $.ajax({
+        url: "/book/" + token,
+        method: "PUT",
+        data: {
+            id,
+            name,
+            time
+        }
+    })
+    .then((data) => {
+        if(!data.error) {
+            alert(data.message)
+            return showLibrary()
+        }
+        return alert(data.message)
+    }).catch((err) => {
+        alert(err)
+    });
+}
+
+// xóa book
+function myDeleteBook(val) {
+    var token = getCookie("token")
+    if(confirm("Bạn có muốn xóa không ?") == true) {
+        $.ajax({
+            url: "/book/" + token,
+            method: "DELETE",
+            data: {
+                id: val
+            }
+        })
+        .then((data) => {
+            if(!data.error) {
+                alert(data.message)
+                return showLibrary()
+            }
+        }).catch((err) => {
+            alert(err)
+        });
+    }
 }
 
 // thoát về login

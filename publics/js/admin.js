@@ -1,15 +1,18 @@
+
 // ẩn hiện select
 $(".data-user").click(function() {
     $(this).addClass("style")
     $(".data-book").removeClass("style")
     $(".content-book").addClass("hide")
     $(".content-infor").removeClass("hide")
+    $(".detail-book").addClass("hide")
 })
 $(".data-book").click(function() {
     $(this).addClass("style")
     $(".data-user").removeClass("style")
     $(".content-infor").addClass("hide")
     $(".content-book").removeClass("hide")
+    $(".detail").addClass("hide")
 })
 // *** Quản lý thông tin
 showAllBook()
@@ -273,7 +276,6 @@ function doneChange() {
         }
     })
     .then((data) => {
-        // chưa hiển thị chi tiết
         if(!data.error) {
             alert(data.message)
             return myDetail(arrIdToChange[1])
@@ -461,8 +463,7 @@ function showAllBook() {
                             <td>${arrValueEmail[i]}</td>
                             <td>${arrValueName[i]}</td>
                             <td>
-                                <button onclick=myDetail('${data.value[i]._id}') type="button" class="btn btn-warning">Chi tiết</button>
-                                <button onclick=myDelete('${data.value[i]._id}') type="button" class="btn btn-danger">Xóa</button>
+                                <button onclick=myDetailBook('${arrValueEmail[i]}') type="button" class="btn btn-warning">Chi tiết</button>
                             </td>
                         </tr>
                     `
@@ -490,7 +491,6 @@ function buttonBook(data1,data2) {
         z = i + 4
         if(z > totalPage[1]) z = totalPage[1] + 1
     }
-    console.log(z);
     for ( i; i < z; i++) {
         $(".book-number-page").append(
             `
@@ -502,6 +502,51 @@ function buttonBook(data1,data2) {
         $(".book-number-page button:first").addClass("bg-button")
     }
 }
+
+var sttBook = 1
+// hiển thị toàn bộ thư viện của một user
+function myDetailBook(email) {
+    $(".content-book").addClass("hide")
+    $(".detail-book").removeClass("hide")
+    $("#list-book-detail").empty()
+    var token = getCookie("token")
+    $.ajax({
+        url: "/book/detail/" + email + "/" + token,
+        method: "GET"
+    })
+    .then((data) => {
+        sttBook = 1
+        if(!data.error) {
+            for(i = 0; i < data.value.length; i++) {
+                $("#list-book-detail").append(
+                    `
+                        <tr class="table-light">
+                            <td class="add-class-book">${sttBook++}</td>
+                            <td class="add-class-book">${data.value[i].name}</td>
+                            <td class="add-class-book">${data.value[i].time}</td>
+                            <td>
+                                <button onclick="myChangeBook('${data.value[i]._id}', '${data.value[i].name}')" id="btn-change" type="button" class="btn btn-info" data-toggle="modal" data-target="#modalChangeBook">Thay đổi</button>
+                                <button onclick=myDeleteBook('${data.value[i]._id}') type="button" class="btn btn-danger">Xóa</button>
+                            </td>
+                        </tr>
+                    `
+                ) 
+            }
+                           
+        }
+    }).catch((err) => {
+        alert(err)
+    });
+}
+// trở lại trang book
+$("#back-book").click(() => {
+    $(".detail-book").addClass("hide")
+    $(".detail").addClass("hide")
+    $(".content-infor").removeClass("hide")
+    if(arrCurrentLoad[1] === 1) return showAllData()
+    return showDataOfPage()
+})
+
 
 // tạo tự động data
 let arrCount = [1]
