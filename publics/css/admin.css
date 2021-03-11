@@ -108,6 +108,11 @@
     height: 100%;
     right: 0px;
 }
+.content-book {
+    position: absolute !important;
+    padding-bottom: 20px;
+    height: auto !important;
+}
 .hide {
     display: none;
 }
@@ -161,6 +166,14 @@
     padding: 10px;
     right: 0px;
 }
+.header-table-book {
+    display: flex;
+    justify-content: space-between;
+}
+.email-book {
+    line-height: 40px;
+    margin-right: 10px;
+}
 #back {
     margin-bottom: 10px;
 }
@@ -169,4 +182,11 @@
 }
 td input {
     margin-left: 10px;
+}
+.btn-value {
+    display: flex;
+    justify-content: flex-end !important;
+}
+.btn-value button {
+    margin-right: 5px;
 }

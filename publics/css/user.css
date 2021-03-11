@@ -150,3 +150,10 @@
 td input {
     margin-left: 10px;
 }
+.btn-value {
+    display: flex;
+    justify-content: flex-end !important;
+}
+.btn-value button {
+    margin-right: 5px;
+}

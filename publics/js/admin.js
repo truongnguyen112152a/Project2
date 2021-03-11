@@ -1,5 +1,5 @@
 
-// ẩn hiện select
+// ẩn hiện select trên thanh menu
 $(".data-user").click(function() {
     $(this).addClass("style")
     $(".data-book").removeClass("style")
@@ -14,26 +14,35 @@ $(".data-book").click(function() {
     $(".content-book").removeClass("hide")
     $(".detail").addClass("hide")
 })
+
 // *** Quản lý thông tin
-showAllBook()
 showAllData()
 
 // biến lưu STT
 let stt = 1
-// lưu sự thay đổi khi tạo mới data
+
+// lưu sự thay đổi khi tạo mới data,nếu thay đổi thành công thì ô modal không có giá trị
+// nếu thay đổi thất bại thì ô modal vẫn lưu giá trị trong ô input
 var arrAdd = [1]
+
 // số lượng data trên một page
 let numPage = 6
+
 // số page trên một Tab
 let pageTab = 4
+
 // tổng số Tab
 let arrTab = [1]
+
 // lưu tổng số page
 let totalPage = [1]
+
 // nhớ page 1 khi back từ detail => home
 let arrCurrentLoad = [1]
+
 // lưu số page hiện tại
 let arrCurrentPage = [1, 0]
+
 // lưu số page hiện tại để Next
 let arrNext = [1, 1]
 // lưu số page hiện tại để Back
@@ -82,7 +91,7 @@ function showAllData() {
                             <th id="stt" scope="row">${stt++}</th>
                             <td>${data.value[i].email}</td>
                             <td>${data.value[i].username}</td>
-                            <td>
+                            <td class="btn-value">
                                 <button onclick=myDetail('${data.value[i]._id}') type="button" class="btn btn-warning">Chi tiết</button>
                                 <button onclick=myDelete('${data.value[i]._id}') type="button" class="btn btn-danger">Xóa</button>
                             </td>
@@ -116,7 +125,7 @@ function showDataOfPage(data) {
                                 <th id="stt" scope="row">${stt++}</th>
                                 <td>${data.value[i].email}</td>
                                 <td>${data.value[i].username}</td>
-                                <td>
+                                <td class="btn-value">
                                     <button onclick=myDetail('${data.value[i]._id}') type="button" class="btn btn-warning">Chi tiết</button>
                                     <button onclick=myDelete('${data.value[i]._id}') type="button" class="btn btn-danger">Xóa</button>
                                 </td>
@@ -223,7 +232,7 @@ function myDetail(data) {
                         <td class="add-class">${data.value[0].email}</td>
                         <td class="add-class">${data.value[0].username}</td>
                         <td class="add-class">${data.value[0].phone}</td>
-                        <td>
+                        <td class="btn-value">
                             <button onclick=myChange('${data.value[0]._id}') id="btn-change" type="button" class="btn btn-info" data-toggle="modal" data-target="#modalChange">Thay đổi</button>
                         </td>
                     </tr>
@@ -234,7 +243,8 @@ function myDetail(data) {
         alert(err)
     });
 }
-// thay đổi thông tin
+// thay đổi data
+
 // lưu ID khi thay đổi data
 var arrIdToChange = [1]
 function myChange(data) {
@@ -251,7 +261,7 @@ function myChange(data) {
     $("#change-password").val("")
 }
 
-// hoàn thành thay đổi
+// hoàn thành thay đổi data
 function doneChange() {
     var token = getCookie("token")
     let email = $("#change-email").val().trim()
@@ -285,6 +295,7 @@ function doneChange() {
         alert(err)
     });
 }
+// back từ detail => home
 $("#back").click(() => {
     $(".detail").addClass("hide")
     $(".content-infor").removeClass("hide")
@@ -319,7 +330,7 @@ function sumArr(data) {
 function subArr(data) {
     if (data.length >= 2) return data.pop()
 }
-// chọn add
+// chọn add data
 function toAdd() {
     if (arrAdd.length >= 2) {
         $("#add-email").val("")
@@ -329,7 +340,7 @@ function toAdd() {
         $("#add-password").val("")
     }
 }
-// chọn tạo data
+// hoàn thành add data
 function doneAdd() {
     let email = $("#add-email").val().trim()
     let username = $("#add-username").val().trim()
@@ -390,6 +401,8 @@ function removeCssBtn() {
 
 // *** Quản lý thư viện
 
+showAllBook()
+
 // số book hiển thị trên một page
 var numBook = 6
 // lưu tổng số page
@@ -442,7 +455,7 @@ function showAllBook() {
             totalBook.push(sumBook)
 
             // hiển số button trên một tab
-            buttonBook(totalBook[1], 1)
+            // buttonBook(totalBook[1], 1)
 
             // chia tổng số page cho số page trên một tab => tổng số tab
             let totalTab = Math.ceil(sumBook / pageTab)
@@ -464,14 +477,14 @@ function showAllBook() {
                             <th id="stt" scope="row">${stt++}</th>
                             <td>${arrValueEmail[i]}</td>
                             <td>${arrValueName[i]}</td>
-                            <td>
+                            <td class="btn-value">
                                 <button onclick=myDetailBook('${arrValueEmail[i]}') type="button" class="btn btn-warning">Chi tiết</button>
                             </td>
                         </tr>
                     `
                     )
                     // thêm giá trị đạt đến giới hạn book trên một trang
-                    if (stt === (numBook + 1)) return null
+                    // if (stt === (numBook + 1)) return null
                 }
             }
         }).catch((err) => {
@@ -483,27 +496,27 @@ function showAllBook() {
 // data2 vị trí truyền tham số cho function
 // data2 = 1 => data1 tổng số page
 // data2 = 2 => data1 vị trí kết thúc trên tab
-function buttonBook(data1,data2) {
-    $(".book-number-page").empty()
-    let i = 1
-    let z = null
-    if(data1 < 4) z = data1 + 1
-    if(data2 === 2) {
-        i = data1  
-        z = i + 4
-        if(z > totalPage[1]) z = totalPage[1] + 1
-    }
-    for ( i; i < z; i++) {
-        $(".book-number-page").append(
-            `
-            <button id="btnBook" type="button" class="btn btn-outline-secondary" onclick="myPageBook.call(this)">${i}</button>
-            `
-        )
-    }
-    if(data2 === 1) {
-        $(".book-number-page button:first").addClass("bg-button")
-    }
-}
+// function buttonBook(data1,data2) {
+//     $(".book-number-page").empty()
+//     let i = 1
+//     let z = null
+//     if(data1 < 4) z = data1 + 1
+//     if(data2 === 2) {
+//         i = data1  
+//         z = i + 4
+//         if(z > totalPage[1]) z = totalPage[1] + 1
+//     }
+//     for ( i; i < z; i++) {
+//         $(".book-number-page").append(
+//             `
+//             <button id="btnBook" type="button" class="btn btn-outline-secondary" onclick="myPageBook.call(this)">${i}</button>
+//             `
+//         )
+//     }
+//     if(data2 === 1) {
+//         $(".book-number-page button:first").addClass("bg-button")
+//     }
+// }
 
 // số thứ tự book
 var sttBook = 1
@@ -513,6 +526,7 @@ var emailBook = [1]
 function myDetailBook(email) {
     if(emailBook.length >= 2) emailBook.pop()
     emailBook.push(email)
+    $(".email-book").text(`${email}`)
     $(".content-book").addClass("hide")
     $(".detail-book").removeClass("hide")
     $("#list-book-detail").empty()
@@ -531,7 +545,7 @@ function myDetailBook(email) {
                             <td class="add-class-book">${sttBook++}</td>
                             <td class="add-class-book">${data.value[i].name}</td>
                             <td class="add-class-book">${data.value[i].time}</td>
-                            <td>
+                            <td class="btn-value">
                                 <button onclick="myChangeBook('${data.value[i]._id}', '${data.value[i].name}')" id="btn-change" type="button" class="btn btn-info" data-toggle="modal" data-target="#modalChangeBook">Thay đổi</button>
                                 <button onclick=myDeleteBook('${data.value[i]._id}') type="button" class="btn btn-danger">Xóa</button>
                             </td>
@@ -571,7 +585,7 @@ function toAddBook() {
         $("#add-name-book").val("")
     }
 }
-// chọn tạo book
+// hoàn thành add book
 function doneAddBook() {
     let email = $("#add-email-book").val().trim()
     let name = $("#add-name-book").val().trim()

@@ -40,7 +40,7 @@ function myDetail() {
                         <td class="add-class">${data.value[0].email}</td>
                         <td class="add-class">${data.value[0].username}</td>
                         <td class="add-class">${data.value[0].phone}</td>
-                        <td>
+                        <td class="btn-value">
                             <button onclick=myChange('123') id="btn-change" type="button" class="btn btn-info" data-toggle="modal" data-target="#modalChange">Thay đổi</button>
                             <button onclick=myDelete('123') type="button" class="btn btn-danger">Xóa</button>
                         </td>
@@ -142,7 +142,7 @@ function showLibrary() {
                             <td class="add-class-book">${stt++}</td>
                             <td class="add-class-book">${data.value[i].name}</td>
                             <td class="add-class-book">${data.value[i].time}</td>
-                            <td>
+                            <td class="btn-value">
                                 <button onclick="myChangeBook('${data.value[i]._id}', '${data.value[i].name}')" id="btn-change" type="button" class="btn btn-info" data-toggle="modal" data-target="#modalChangeBook">Thay đổi</button>
                                 <button onclick=myDeleteBook('${data.value[i]._id}') type="button" class="btn btn-danger">Xóa</button>
                             </td>
@@ -172,7 +172,7 @@ function toAddBook() {
         $("#add-name-book").val("")
     }
 }
-// chọn tạo book
+// hoàn thành book
 function doneAddBook() {
     let email = arrEmail[1]
     let name = $("#add-name-book").val().trim()
